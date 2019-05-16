@@ -6,6 +6,10 @@ using System.Web;
 namespace Multas.Models
 {
     public class Agentes {
+        public Agentes()
+        {
+            ListaDasMultas = new HashSet<Multas>();
+        }
 
         public int ID { get; set; }
 
@@ -17,7 +21,7 @@ namespace Multas.Models
 
         // identifica as multas passadas pelo Agente
 
-        public ICollection<Multas> ListaDasMultas {get; set;}
+        public virtual ICollection<Multas> ListaDasMultas {get; set;}
 
 
     }

@@ -1,13 +1,12 @@
 ﻿@model Multas.Models.Agentes
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Detalhes Agente";
 }
 
-<h2>Details</h2>
+<h2>Detalhes do Agente <i>@Model.Nome</i> </h2>
 
 <div>
-    <h4>Agentes</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -35,6 +34,43 @@
         </dd>
 
     </dl>
+    @*mostrar aqui os dados das multas emitidas pelo Agente*@
+    <hr />
+    <h4>Lista das Multas</h4>
+
+    <table class="table">
+
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.ListaDasMultas.FirstOrDefault().ID)</th>
+            <th>@Html.DisplayNameFor(model => model.ListaDasMultas.FirstOrDefault().DataDaMulta)</th>
+            <th>@Html.DisplayNameFor(model => model.ListaDasMultas.FirstOrDefault().ValorMulta)</th>   
+            <th>@Html.DisplayNameFor(model => model.ListaDasMultas.FirstOrDefault().Condutor.Nome)</th>
+            <th>@Html.DisplayNameFor(model => model.ListaDasMultas.FirstOrDefault().Viatura.Matricula)</th>
+            
+        </tr>
+
+        @*LIstas as multas de um agente*@
+
+        @foreach (var multa in Model.ListaDasMultas)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => multa.ID)</td>
+                <td>@multa.DataDaMulta</td>
+                <td>@multa.ValorMulta</td>
+
+                <td> <a href="/condutores/details/@multa.Condutor.ID">@multa.Condutor.Nome</a> </td>
+
+                <td>
+                    @Html.ActionLink(multa.Viatura.Matricula, "Details", "Viaturas", new { id = multa.Viatura.ID }, null);
+                </td>
+            </tr>
+        }
+    </table>
+
+    <hr />
+
+
+
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
