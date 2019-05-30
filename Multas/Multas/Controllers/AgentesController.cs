@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -61,15 +62,64 @@ namespace Multas.Controllers
         // POST: Agentes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+
+            /// <summary>
+            /// criaçao de um novo agente
+            /// </summary>
+            /// <param name="agentes"> recolhe os dados do nome e da esquadra do agentee</param>
+            /// <param name="fotografia">representa a fotografia que a pessoas identifica o agente</param>
+            /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Nome,Esquadra,Fotografia")] Agentes agentes)
+        public ActionResult Create([Bind(Include = "Nome,Esquadra")] Agentes agentes, HttpPostedFileBase fotografia)
+          
         {
-            if (ModelState.IsValid)
+            // precisamos de processar a foto
+            // 1º sera que foi fornecido um ficheiro
+            // 2º sera do tipo correto
+            // 3º se for fo tipo correto,guarda-se
+            // senao atribuise um avatar generico ao utilizador
+            string caminho="";
+            bool haFicheiro = false;
+            //Há ficheiro
+            if(fotografia == null)
             {
-                db.Agentes.Add(agentes);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                //nao ha ficheiro
+                // atribui se lhe o avatar
+                agentes.Fotografia = "nopic.png";
+            }
+            else
+            {
+                if(fotografia.ContentType=="image/jpeg" || fotografia.ContentType == "image/png")
+                {
+                    string extensao = Path.GetExtension(fotografia.FileName).ToLower();
+
+                    Guid g;
+                    g = Guid.NewGuid();
+                    string nome = g.ToString() + extensao;
+
+                    caminho = Path.Combine(Server.MapPath("~/imagens"), nome);
+
+                    agentes.Fotografia = nome;
+                    haFicheiro = true;
+                }
+            }
+            if (ModelState.IsValid)// valida se os dados fornecidos estao de acordo com as regras definifas no modelo
+            {
+                try
+                {
+                    //adiciona  o novo agente ao modelo
+                    db.Agentes.Add(agentes);
+                    // consolida os dados na BD
+                    db.SaveChanges();
+                    if (haFicheiro) fotografia.SaveAs(caminho);
+                    //redireciona o utilizado para a pagina de index
+                    return RedirectToAction("Index");
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError("","ocorreu um erro na escrita de dados no novo agente");
+                }
             }
 
             return View(agentes);
