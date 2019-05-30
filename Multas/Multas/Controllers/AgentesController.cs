@@ -13,7 +13,7 @@ namespace Multas.Controllers
 {
     public class AgentesController : Controller
     {
-        private MultasDB db = new MultasDB();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Agentes
         public ActionResult Index()

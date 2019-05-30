@@ -197,7 +197,6 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Multas.cs" />
-    <Compile Include="Models\MultasDB.cs" />
     <Compile Include="Models\Viaturas.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />

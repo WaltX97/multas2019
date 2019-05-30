@@ -1,4 +1,4 @@
-﻿using IdentitySample.Models;
+﻿using Multas.Models;
 using Microsoft.AspNet.Identity.Owin;
 using System.Data.Entity;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
-namespace IdentitySample.Controllers
+namespace Multas.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class UsersAdminController : Controller
